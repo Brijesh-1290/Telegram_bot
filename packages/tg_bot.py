@@ -2,7 +2,7 @@ import time
 
 from telegram import Update, Bot
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext
-from open_ai import chatbot
+from packages.ai_chatbot import chatbot
 from dotenv import load_dotenv
 import os
 
