@@ -30,4 +30,4 @@ jobs:
 
     - name: Deploy
       run: |
-        nohup python tg_bot.py &
+        nohup python tg_bot.py > bot.log 2>&1 &
