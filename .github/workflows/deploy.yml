@@ -45,6 +45,10 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
+      - name: Install Render CLI
+        run: |
+          curl -fsSL https://render.com/static/cli/render-0.4.3-linux-amd64.tar.gz | sudo tar -xz -C /usr/local/bin
+
       - name: Deploy to Render
         env:
           RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
