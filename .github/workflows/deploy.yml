@@ -8,6 +8,7 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
 
     env:
       OPEN_AI_API_KEY: ${{secrets.OPEN_AI_API_KEY}}
@@ -29,4 +30,4 @@ jobs:
 
     - name: Deploy
       run: |
-        python tg_bot.py
+        nohup python tg_bot.py &
