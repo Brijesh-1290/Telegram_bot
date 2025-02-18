@@ -34,7 +34,16 @@ jobs:
     steps:
       - name: Install Render CLI
         run: |
-          curl -fsSL https://render.com/cli/render-linux-amd64.tar.gz | sudo tar -xz -C /usr/local/bin
+          curl -L https://github.com/render-oss/cli/releases/download/v1.1.0/cli_1.1.0_linux_amd64.zip -o render.zip
+          unzip render.zip
+          sudo mv cli_v1.1.0 /usr/local/bin/render
+          
+      - name: List services and get service ID
+        run: |
+          echo "Listing services..."
+          render services list
+          echo "Enter the service ID:"
+          read -p "Service ID: " SERVICE_ID
 
       - name: Deploy to Render
         env:
@@ -42,7 +51,7 @@ jobs:
           OPEN_AI_API_KEY: ${{ secrets.OPEN_AI_API_KEY }}
           BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
         run: |
-          render deploy --service-name telegram-bot --api-key $RENDER_API_KEY
+          render deploys --service-name telegram-bot --api-key $RENDER_API_KEY
 
   rollback:
     runs-on: ubuntu-latest
