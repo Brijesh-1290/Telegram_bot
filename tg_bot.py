@@ -22,6 +22,7 @@ def echo(update: Update, context: CallbackContext) -> None:
 
 def main() -> None:
     bot_token = os.getenv('BOT_TOKEN')
+    print(len(bot_token))
     updater = Updater(token=bot_token, use_context=True)
     dispatcher = updater.dispatcher
 
