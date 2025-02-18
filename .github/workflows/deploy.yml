@@ -50,4 +50,4 @@ jobs:
           OPEN_AI_API_KEY: ${{ secrets.OPEN_AI_API_KEY }}
           BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
         run: |
-          python start_up.py
+          nohup python start_up.py > bot.log 2>&1 &
