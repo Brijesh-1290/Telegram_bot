@@ -8,6 +8,10 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+
+    env:
+      OPEN_AI_API_KEY: ${{ secrets.OPEN_AI_API_KEY }}
+      BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
     
     steps:
     - name: Checkout code
