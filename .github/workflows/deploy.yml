@@ -11,7 +11,7 @@ jobs:
 
     env:
       OPEN_AI_API_KEY: ${{ secrets.OPEN_AI_API_KEY }}
-      BOT_TOKEN: '7694553148:AAFIT1LKyJD_WFc1Niwd7HZUXOOa8uHG33s'
+      BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
     
     steps:
     - name: Checkout code
