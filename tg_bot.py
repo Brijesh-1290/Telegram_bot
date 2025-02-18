@@ -1,3 +1,5 @@
+import time
+
 from telegram import Update, Bot
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext
 from open_ai import chatbot
@@ -14,7 +16,15 @@ def start(update: Update, context: CallbackContext) -> None:
 def echo(update: Update, context: CallbackContext) -> None:
     username = update.message.from_user.username
     msg = update.message.text
-    response = chatbot(msg)
+    try:
+        response = chatbot(msg)
+    except Exception as e:
+        response = "Some unexpected error occurred! please wait for 1 min."
+        try:
+            time.sleep(60)
+            response = chatbot(msg)
+        except Exception as e:
+            print(str(e))
     update.message.reply_text(response)
     print(f"{username}: {msg}")
     print(f"Bot: {response}")
