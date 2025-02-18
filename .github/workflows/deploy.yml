@@ -37,6 +37,14 @@ jobs:
           curl -L https://github.com/render-oss/cli/releases/download/v1.1.0/cli_1.1.0_linux_amd64.zip -o render.zip
           unzip render.zip
           sudo mv cli_v1.1.0 /usr/local/bin/render
+          
+      - name: List services and get service ID
+        run: |
+          echo "Listing services..."
+          render services list
+          SERVICE_ID=$(render services list | grep "telegram-bot" | awk '{print $1}')
+          echo "Service ID: $SERVICE_ID"
+          echo "SERVICE_ID=$SERVICE_ID" >> $GITHUB_ENV
 
       - name: Deploy to Render
         env:
@@ -44,7 +52,7 @@ jobs:
           OPEN_AI_API_KEY: ${{ secrets.OPEN_AI_API_KEY }}
           BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
         run: |
-          render deploys --service-name telegram-bot --api-key $RENDER_API_KEY
+          render deploys create --service-id ${{ env.SERVICE_ID }} --api-key $RENDER_API_KEY
 
   rollback:
     runs-on: ubuntu-latest
@@ -55,4 +63,4 @@ jobs:
         env:
           RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
         run: |
-          render rollback --service-name telegram-bot --api-key $RENDER_API_KEY
+          render rollback --service-id ${{ env.SERVICE_ID }} --api-key $RENDER_API_KEY
