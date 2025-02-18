@@ -31,14 +31,18 @@ def echo(update: Update, context: CallbackContext) -> None:
 
 
 def main() -> None:
-    bot_token = os.getenv('BOT_TOKEN')
-    updater = Updater(token=bot_token, use_context=True)
+    PORT = int(os.environ.get('PORT', 8443))
+    BOT_TOKEN = os.getenv('BOT_TOKEN')
+    updater = Updater(token=BOT_TOKEN, use_context=True)
     dispatcher = updater.dispatcher
 
     dispatcher.add_handler(CommandHandler('start', start))
     dispatcher.add_handler(MessageHandler(Filters.text & ~Filters.command, echo))
 
-    updater.start_polling()
+    # updater.start_polling()
+    # Add a webhook to bind to the port
+    updater.start_webhook(listen="0.0.0.0", port=PORT, url_path=BOT_TOKEN)
+    updater.bot.set_webhook(f"https://{os.environ['RENDER_EXTERNAL_HOSTNAME']}/{BOT_TOKEN}")
     updater.idle()
 
 
