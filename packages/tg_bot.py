@@ -19,12 +19,7 @@ def echo(update: Update, context: CallbackContext) -> None:
     try:
         response = chatbot(msg)
     except Exception as e:
-        response = "Some unexpected error occurred! please wait for 1 min."
-        try:
-            time.sleep(60)
-            response = chatbot(msg)
-        except Exception as e:
-            print(str(e))
+        response = "Some unexpected error occurred! please try again after some time."
     update.message.reply_text(response)
     print(f"{username}: {msg}")
     print(f"Bot: {response}")
