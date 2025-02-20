@@ -25,7 +25,8 @@ def start(update: Update, context: CallbackContext) -> None:
     # Fetch user's conversation history
     user_conversations = conversations.find({"identifier": identifier})
     for convo in user_conversations:
-        chat.extend([{"role": "user", "content": convo['message']},{"role": "assistant", "content": convo['response']}])
+        chat.extend(
+            [{"role": "user", "content": convo['message']}, {"role": "assistant", "content": convo['response']}])
 
 
 def echo(update: Update, context: CallbackContext) -> None:
@@ -57,6 +58,11 @@ def echo(update: Update, context: CallbackContext) -> None:
 
 
 def clear(update: Update, context: CallbackContext) -> None:
+    global chat
+    chat = [
+        {"role": "system",
+         "content": SYSTEM_CONTENT}
+    ]
     user = update.message.from_user
     identifier = user.username if user.username else user.id
     conversations.delete_many({"identifier": identifier})
