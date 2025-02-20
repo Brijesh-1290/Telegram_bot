@@ -79,10 +79,10 @@ def main() -> None:
     dispatcher.add_handler(MessageHandler(Filters.text & ~Filters.command, echo))
     dispatcher.add_handler(CommandHandler('clear', clear))
 
-    updater.start_polling()
+    # updater.start_polling()
     # Add a webhook to bind to the port
-    # updater.start_webhook(listen="0.0.0.0", port=PORT, url_path=BOT_TOKEN)
-    # updater.bot.set_webhook(f"https://{os.environ['RENDER_EXTERNAL_HOSTNAME']}/{BOT_TOKEN}")
+    updater.start_webhook(listen="0.0.0.0", port=PORT, url_path=BOT_TOKEN)
+    updater.bot.set_webhook(f"https://{os.environ['RENDER_EXTERNAL_HOSTNAME']}/{BOT_TOKEN}")
     updater.idle()
 
 
