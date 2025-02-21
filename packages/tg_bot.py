@@ -10,35 +10,33 @@ from packages.db import conversations
 load_dotenv()
 SYSTEM_CONTENT = os.getenv('SYSTEM_CONTENT')
 
-chat = [
-    {"role": "system",
-     "content": SYSTEM_CONTENT}
-]
 
-
-def start(update: Update, context: CallbackContext) -> None:
-    global chat
-    update.message.reply_text('Hello! I am your bot. How can I help you today?')
-    user = update.message.from_user
-    identifier = user.username if user.username else user.id
-
+def get_chat(identifier):
+    chat = [
+        {"role": "system",
+         "content": SYSTEM_CONTENT}
+    ]
     # Fetch user's conversation history
     user_conversations = conversations.find({"identifier": identifier})
     for convo in user_conversations:
         chat.extend(
             [{"role": "user", "content": convo['message']}, {"role": "assistant", "content": convo['response']}])
+    return chat
+
+
+def start(update: Update, context: CallbackContext) -> None:
+    update.message.reply_text('Hello! I am your bot. How can I help you today?')
 
 
 def echo(update: Update, context: CallbackContext) -> None:
-    global chat
-    convo = chat
     user = update.message.from_user
     identifier = user.username if user.username else user.id
+    chat = get_chat(identifier)
     msg = update.message.text
     try:
-        convo.append({"role": "user", "content": msg})
-        response = chatbot(convo)
-        convo.append({"role": "assistant", "content": response})
+        chat.append({"role": "user", "content": msg})
+        response = chatbot(chat)
+        chat.append({"role": "assistant", "content": response})
     except Exception as e:
         response = "Some unexpected error occurred! please try again after some time."
 
@@ -58,11 +56,6 @@ def echo(update: Update, context: CallbackContext) -> None:
 
 
 def clear(update: Update, context: CallbackContext) -> None:
-    global chat
-    chat = [
-        {"role": "system",
-         "content": SYSTEM_CONTENT}
-    ]
     user = update.message.from_user
     identifier = user.username if user.username else user.id
     conversations.delete_many({"identifier": identifier})
