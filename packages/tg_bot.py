@@ -30,7 +30,7 @@ def start(update: Update, context: CallbackContext) -> None:
 
 def echo(update: Update, context: CallbackContext) -> None:
     user = update.message.from_user
-    identifier = user.username if user.username else user.id
+    identifier = user.username if user.username else user.name
     chat = get_chat(identifier)
     msg = update.message.text
     try:
@@ -57,7 +57,7 @@ def echo(update: Update, context: CallbackContext) -> None:
 
 def clear(update: Update, context: CallbackContext) -> None:
     user = update.message.from_user
-    identifier = user.username if user.username else user.id
+    identifier = user.username if user.username else user.name
     conversations.delete_many({"identifier": identifier})
     update.message.reply_text('Your conversation history has been cleared.')
 
@@ -72,10 +72,10 @@ def main() -> None:
     dispatcher.add_handler(MessageHandler(Filters.text & ~Filters.command, echo))
     dispatcher.add_handler(CommandHandler('clear', clear))
 
-    # updater.start_polling()
+    updater.start_polling()
     # Add a webhook to bind to the port
-    updater.start_webhook(listen="0.0.0.0", port=PORT, url_path=BOT_TOKEN)
-    updater.bot.set_webhook(f"https://{os.environ['RENDER_EXTERNAL_HOSTNAME']}/{BOT_TOKEN}")
+    # updater.start_webhook(listen="0.0.0.0", port=PORT, url_path=BOT_TOKEN)
+    # updater.bot.set_webhook(f"https://{os.environ['RENDER_EXTERNAL_HOSTNAME']}/{BOT_TOKEN}")
     updater.idle()
 
 
